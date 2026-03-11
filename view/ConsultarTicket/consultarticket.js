@@ -10,16 +10,6 @@ function init(){
 
 $(document).ready(function(){
 
-    /* TODO: Llenar Combo Categoria */
-    $.post("../../controller/categoria.php?op=combo",function(data, status){
-        $('#cat_id').html(data);
-    });
-
-    /* TODO: llenar Combo Prioridad */
-    $.post("../../controller/prioridad.php?op=combo",function(data, status){
-        $('#prio_id').html(data);
-    });
-
     /* TODO:LLenar Combo usuario asignar */
     $.post("../../controller/usuario.php?op=combo", function (data) {
         $('#usu_asig').html(data);
@@ -90,12 +80,6 @@ $(document).ready(function(){
 
         listardatatable(tick_titulo,cat_id,prio_id);
     }
-});
-
-/* TODO: Link para poder ver el detalle de ticket en otra ventana */
-$(document).on("click",".btn-inline",function(){
-    const ciphertext = $(this).data("ciphertext");
-    window.open('http://localhost:90/PERSONAL_HelpDesk/view/DetalleTicket/?ID='+ ciphertext +'');
 });
 
 /* TODO: Mostrar datos antes de asignar */

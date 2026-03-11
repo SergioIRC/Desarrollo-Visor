@@ -22,8 +22,8 @@
 	<div class="page-content">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-xl-12">
-					<!-- <div class="row">
+				<!-- <div class="col-xl-12">
+					<div class="row">
 						<div class="col-sm-4">
 	                        <article class="statistic-box green">
 	                            <div>
@@ -48,8 +48,8 @@
 	                            </div>
 	                        </article>
 	                    </div>
-					</div> -->
-				</div>
+					</div>
+				</div> -->
 			</div>
 
 			<!-- <section class="card">

@@ -80,32 +80,32 @@
                     <div class="form-group">
                         <input type="password" id="usu_pass" name="usu_pass" class="form-control" placeholder="Contraseña"/>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <div class="float-right reset">
                             <a href="../../view/ResetPassword/">Recuperar Contraseña</a>
                         </div>
-                    </div>
-                    <div class="form-group" style="display: flex; justify-content: center; align-items: center;">
+                    </div> -->
+                    <!-- <div class="form-group" style="display: flex; justify-content: center; align-items: center;">
                         <!--TODO: Botón "Iniciar sesión con Google" con atributos de datos HTML para la API -->
-                        <div id="g_id_onload"
+                       <!--  <div id="g_id_onload"
                             data-client_id="592225408682-0k7df94bqpucikiovudb27idooij9slm.apps.googleusercontent.com"
                             data-context="signin"
                             data-ux_mode="popup"
                             data-callback="handleCredentialResponse"
                             data-auto_prompt="false"
                         >
-                        </div>
+                        </div> -->
 
                         <!--TODO: Configuración del botón de inicio de sesión con Google -->
-                        <div class="g_id_signin"
+                        <!-- <div class="g_id_signin"
                             data-type="standard"
                             data-shape="rectangular"
                             data-theme="outline"
                             data-text="signin_with"
                             data-size="large"
                             data-logo_alignment="left"
-                        ></div>
-                    </div>
+                        ></div> -->
+                    <!-- </div> -->
                     <input type="hidden" name="enviar" class="form-control" value="si">
                     <button type="submit" class="btn btn-rounded">Acceder</button>
                 </form>
@@ -137,8 +137,5 @@
     });
 </script>
 <script src="../../public/js/app.js"></script>
-<script src="https://accounts.google.com/gsi/client" async></script>
-<script type="text/javascript" src="accesosoporte.js"></script>
-
 </body>
 </html>

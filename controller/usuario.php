@@ -157,18 +157,7 @@
             }
             break;
 
-        case "accesogoogle":
-            $datos = $usuario->get_usuario_x_correo($_POST["usu_correo"]);
-            if(count($datos)==0){
-                echo "0";
-            }else{
-                $_SESSION["usu_id"]=$datos[0]["usu_id"];
-                $_SESSION["usu_nom"]=$datos[0]["usu_nom"];
-                $_SESSION["usu_ape"]=$datos[0]["usu_ape"];
-                $_SESSION["rol_id"]=$datos[0]["rol_id"];
-                echo "1";
-            }
-            break;
+        
 
     }
 ?>
