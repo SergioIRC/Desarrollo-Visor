@@ -28,12 +28,13 @@
 			</header>
 
 			<div class="box-typical box-typical-padding">
-				
-				<div class="row" id="viewuser">
+
+				<!-- Filtros de busqueda -->
+				<div class="row" id="viewfiltros">
 					<div class="col-lg-3">
 						<fieldset class="form-group">
 							<label class="form-label" for="tick_titulo">Titulo</label>
-							<input type="text" class="form-control" id="tick_titulo" name="tick_titulo" placeholder="Ingrese Titulo" required>
+							<input type="text" class="form-control" id="tick_titulo" name="tick_titulo" placeholder="Ingrese Titulo">
 						</fieldset>
 					</div>
 
@@ -42,7 +43,6 @@
 							<label class="form-label" for="cat_id">Categoria</label>
 							<select class="select2" id="cat_id" name="cat_id" data-placeholder="Seleccionar">
 								<option label="Seleccionar"></option>
-
 							</select>
 						</fieldset>
 					</div>
@@ -52,7 +52,6 @@
 							<label class="form-label" for="prio_id">Prioridad</label>
 							<select class="select2" id="prio_id" name="prio_id" data-placeholder="Seleccionar">
 								<option label="Seleccionar"></option>
-
 							</select>
 						</fieldset>
 					</div>
@@ -60,46 +59,74 @@
 					<div class="col-lg-2">
 						<fieldset class="form-group">
 							<label class="form-label" for="btnfiltrar">&nbsp;</label>
-							<button type="submit" class="btn btn-rounded btn-primary btn-block" id="btnfiltrar">Filtrar</button>
+							<button type="button" class="btn btn-rounded btn-primary btn-block" id="btnfiltrar">
+								<i class="fa fa-search"></i> Filtrar
+							</button>
 						</fieldset>
 					</div>
 
 					<div class="col-lg-2">
 						<fieldset class="form-group">
 							<label class="form-label" for="btntodo">&nbsp;</label>
-							<button class="btn btn-rounded btn-primary btn-block" id="btntodo">Ver Todo</button>
+							<button type="button" class="btn btn-rounded btn-default btn-block" id="btntodo">
+								<i class="fa fa-refresh"></i> Limpiar
+							</button>
 						</fieldset>
 					</div>
 				</div>
 
-				<div class="box-typical box-typical-padding" id="table">
-					<table id="ticket_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
-						<thead>
-							<tr>
-								<th style="width: 5%;">Nro.Ticket</th>
-								<th style="width: 15%;">Categoria</th>
-								<th class="d-none d-sm-table-cell" style="width: 30%;">Titulo</th>
-								<th class="d-none d-sm-table-cell" style="width: 5%;">Prioridad</th>
-								<th class="d-none d-sm-table-cell" style="width: 5%;">Estado</th>
-								<th class="d-none d-sm-table-cell" style="width: 10%;">Fecha Creación</th>
-								<th class="d-none d-sm-table-cell" style="width: 10%;">Fecha Asignación</th>
-								<th class="d-none d-sm-table-cell" style="width: 10%;">Fecha Cierre</th>
-								<th class="d-none d-sm-table-cell" style="width: 10%;">Soporte</th>
-								<th class="text-center" style="width: 5%;"></th>
-							</tr>
-						</thead>
-						<tbody>
+				<!-- Visor principal: lista izquierda + PDF derecha -->
+				<div class="row" id="visor-container" style="margin-top:10px;">
 
-						</tbody>
-					</table>
+					<!-- Lista de PDFs encontrados -->
+					<div class="col-lg-4 col-md-5" id="panel-lista">
+						<div style="height:75vh; overflow-y:auto; border:1px solid #e0e0e0; border-radius:4px;">
+							<div style="padding:10px 15px; background:#f5f5f5; border-bottom:1px solid #e0e0e0;">
+								<span class="fa fa-file-pdf-o" style="color:#d9534f;"></span>
+								<strong style="margin-left:5px;">Documentos encontrados</strong>
+								<span id="contador-pdf" style="margin-left:8px; background:#6c757d; color:#fff; padding:2px 8px; border-radius:10px; font-size:12px;">0</span>
+							</div>
+							<div id="lista-pdfs" style="padding:8px;">
+								<div id="mensaje-inicial" class="text-center text-muted" style="margin-top:40px;">
+									<i class="fa fa-search fa-3x" style="opacity:0.3;"></i>
+									<p style="margin-top:10px;">Utilice los filtros para buscar documentos.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Visor PDF iframe -->
+					<div class="col-lg-8 col-md-7" id="panel-visor">
+						<div style="height:75vh; border:1px solid #e0e0e0; border-radius:4px; display:flex; flex-direction:column;">
+							<div style="padding:10px 15px; background:#f5f5f5; border-bottom:1px solid #e0e0e0; display:flex; align-items:center; justify-content:space-between;">
+								<div>
+									<span class="fa fa-file-pdf-o" style="color:#d9534f;"></span>
+									<strong id="titulo-pdf-activo" style="margin-left:5px;">Ningún documento seleccionado</strong>
+								</div>
+								<div id="acciones-pdf" style="display:none;">
+									<a id="btn-descargar-pdf" href="#" target="_blank" class="btn btn-sm btn-success">
+										<i class="fa fa-download"></i> Descargar
+									</a>
+								</div>
+							</div>
+							<div id="contenedor-iframe" style="flex:1; position:relative; overflow:hidden;">
+								<div id="placeholder-visor" class="text-center text-muted" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
+									<i class="fa fa-file-pdf-o fa-5x" style="opacity:0.2; color:#d9534f;"></i>
+									<p style="margin-top:15px;">Seleccione un documento de la lista para visualizarlo.</p>
+								</div>
+								<iframe id="pdf-iframe" src="" style="width:100%; height:100%; border:none; display:none;"></iframe>
+							</div>
+						</div>
+					</div>
+
 				</div>
+				<!-- Fin Visor principal -->
 
 			</div>
 
 		</div>
 	</div>
 	<!-- Contenido -->
-	<?php require_once("modalasignar.php");?>
 
 	<?php require_once("../MainJs/js.php");?>
 

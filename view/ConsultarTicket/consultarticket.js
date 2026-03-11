@@ -1,264 +1,131 @@
-var tabla;
-var usu_id =  $('#user_idx').val();
-var rol_id =  $('#rol_idx').val();
-
-function init(){
-    $("#ticket_form").on("submit",function(e){
-        guardar(e);	
-    });
-}
+var usu_id = $('#user_idx').val();
 
 $(document).ready(function(){
 
-    /* TODO:LLenar Combo usuario asignar */
-    $.post("../../controller/usuario.php?op=combo", function (data) {
-        $('#usu_asig').html(data);
-    });
+    cargarCombos();
 
-    /* TODO: rol si es 1 entonces es usuario */
-    if (rol_id==1){
-        $('#viewuser').hide();
-
-        tabla=$('#ticket_data').dataTable({
-            "aProcessing": true,
-            "aServerSide": true,
-            dom: 'Bfrtip',
-            "searching": true,
-            lengthChange: false,
-            colReorder: true,
-            buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                    ],
-            "ajax":{
-                url: '../../controller/ticket.php?op=listar_x_usu',
-                type : "post",
-                dataType : "json",
-                data:{ usu_id : usu_id },
-                error: function(e){
-                    console.log(e.responseText);
-                }
-            },
-            "ordering": false,
-            "bDestroy": true,
-            "responsive": true,
-            "bInfo":true,
-            "iDisplayLength": 10,
-            "autoWidth": false,
-            "language": {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                "sInfo":           "Mostrando un total de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst":    "Primero",
-                    "sLast":     "Último",
-                    "sNext":     "Siguiente",
-                    "sPrevious": "Anterior"
-                },
-                "oAria": {
-                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-            }     
-        }).DataTable();
-    }else{
-        /* TODO: Filtro avanzado en caso de ser soporte */
-        var tick_titulo = $('#tick_titulo').val();
+    $(document).on('click', '#btnfiltrar', function(){
+        var tick_titulo = $('#tick_titulo').val().trim();
         var cat_id = $('#cat_id').val();
         var prio_id = $('#prio_id').val();
+        buscarPDFs(tick_titulo, cat_id, prio_id);
+    });
 
-        listardatatable(tick_titulo,cat_id,prio_id);
-    }
+    $(document).on('click', '#btntodo', function(){
+        $('#tick_titulo').val('');
+        $('#cat_id').val('').trigger('change');
+        $('#prio_id').val('').trigger('change');
+        limpiarVisor();
+        buscarPDFs('', '', '');
+    });
+
+    $(document).on('keypress', '#tick_titulo', function(e){
+        if(e.which === 13){
+            $('#btnfiltrar').trigger('click');
+        }
+    });
+
 });
 
-/* TODO: Mostrar datos antes de asignar */
-function asignar(tick_id){
-    $.post("../../controller/ticket.php?op=mostrar_noencry", {tick_id : tick_id}, function (data) {
+function cargarCombos(){
+    $.post('../../controller/visor.php?op=combo_categorias', function(data){
+        $('#cat_id').html('<option label="Seleccionar"></option>' + data);
+        $('#cat_id').trigger('change');
+    });
+
+    $.post('../../controller/visor.php?op=combo_prioridades', function(data){
+        $('#prio_id').html('<option label="Seleccionar"></option>' + data);
+        $('#prio_id').trigger('change');
+    });
+}
+
+function buscarPDFs(titulo, cat_id, prio_id){
+    $('#lista-pdfs').html(
+        '<div class="text-center" style="margin-top:40px;">'+
+        '<i class="fa fa-spinner fa-spin fa-2x" style="color:#337ab7;"></i>'+
+        '<p style="margin-top:10px; color:#666;">Buscando documentos...</p>'+
+        '</div>'
+    );
+
+    $.post('../../controller/visor.php?op=buscar_pdfs', {
+        titulo: titulo,
+        cat_id: cat_id,
+        prio_id: prio_id
+    }, function(data){
         data = JSON.parse(data);
-        $('#tick_id').val(data.tick_id);
-
-        $('#mdltitulo').html('Asignar Agente');
-        $("#modalasignar").modal('show');
+        renderizarLista(data);
     });
 }
 
-/* TODO: Guardar asignacion de usuario de soporte */
-function guardar(e){
-    e.preventDefault();
+function renderizarLista(documentos){
+    $('#contador-pdf').text(documentos.length);
 
-    $('#btnguardar').prop("disabled",true);
-    $('#btnguardar').html('<i class="fa fa-spinner fa-spin"></i> Espere..');
+    if(documentos.length === 0){
+        $('#lista-pdfs').html(
+            '<div class="text-center text-muted" style="margin-top:40px;">'+
+            '<i class="fa fa-inbox fa-3x" style="opacity:0.3;"></i>'+
+            '<p style="margin-top:10px;">No se encontraron documentos con los filtros seleccionados.</p>'+
+            '</div>'
+        );
+        return;
+    }
 
-	var formData = new FormData($("#ticket_form")[0]);
-    $.ajax({
-        url: "../../controller/ticket.php?op=asignar",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(datos){
-            /* TODO:Recargar Datatable JS */
-            $('#ticket_data').DataTable().ajax.reload();
+    var html = '';
+    $.each(documentos, function(i, doc){
+        html +=
+            '<div class="pdf-item" data-pdf-url="'+doc.url+'" data-pdf-ruta="'+doc.ruta+'" data-pdf-nombre="'+doc.nombre+'" '+
+            'style="cursor:pointer; padding:10px 12px; border-bottom:1px solid #f0f0f0; border-radius:3px; transition:background 0.2s;">'+
+                '<div style="display:flex; align-items:center;">'+
+                    '<i class="fa fa-file-pdf-o" style="color:#d9534f; font-size:22px; flex-shrink:0;"></i>'+
+                    '<div style="margin-left:10px; overflow:hidden;">'+
+                        '<div style="font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="'+doc.nombre+'">'+doc.nombre+'</div>'+
+                        '<div style="font-size:11px; color:#999; margin-top:2px;">'+
+                            '<span class="fa fa-folder-o"></span> '+doc.categoria+
+                            ' &nbsp;|&nbsp; <span class="fa fa-tag"></span> '+doc.prioridad+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</div>';
+    });
 
-            /* TODO: Alerta de confirmacion */
-            swal("Correcto!", "Asignado Correctamente", "success");
+    $('#lista-pdfs').html(html);
 
-            /* TODO: Ocultar Modal */
-            $("#modalasignar").modal('hide');
+    $(document).off('click', '.pdf-item').on('click', '.pdf-item', function(){
+        $('.pdf-item').css({'background':'', 'border-left':''});
+        $(this).css({'background':'#e8f0fe', 'border-left':'3px solid #337ab7'});
 
-            $('#btnguardar').prop("disabled",false);
-            $('#btnguardar').html('Guardar');
-        }
+        var url    = $(this).data('pdf-url');
+        var ruta   = $(this).data('pdf-ruta');
+        var nombre = $(this).data('pdf-nombre');
+
+        abrirPDF(url, ruta, nombre);
     });
 }
 
-/* TODO:Reabrir ticket */
-function CambiarEstado(tick_id){
-    swal({
-        title: "HelpDesk",
-        text: "Esta seguro de Reabrir el Ticket?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-warning",
-        confirmButtonText: "Si",
-        cancelButtonText: "No",
-        closeOnConfirm: false
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            /* TODO: Enviar actualizacion de estado */
-            $.post("../../controller/ticket.php?op=reabrir", {tick_id : tick_id,usu_id : usu_id}, function (data) {
+function abrirPDF(url, ruta, nombre){
+    $('#placeholder-visor').hide();
+    $('#pdf-iframe').attr('src', url).show();
+    $('#titulo-pdf-activo').text(nombre);
+    $('#btn-descargar-pdf').attr('href', url);
+    $('#acciones-pdf').show();
 
-            });
-
-            /* TODO:Recargar datatable js */
-            $('#ticket_data').DataTable().ajax.reload();	
-
-            /* TODO: Mensaje de Confirmacion */
-            swal({
-                title: "HelpDesk!",
-                text: "Ticket Abierto.",
-                type: "success",
-                confirmButtonClass: "btn-success"
-            });
-        }
+    $.post('../../controller/visor.php?op=registrar_log', {
+        usu_id:      usu_id,
+        pdf_nombre:  nombre,
+        pdf_ruta:    ruta
     });
 }
 
-/* TODO:Filtro avanzado */
-$(document).on("click","#btnfiltrar", function(){
-    limpiar();
-
-    var tick_titulo = $('#tick_titulo').val();
-    var cat_id = $('#cat_id').val();
-    var prio_id = $('#prio_id').val();
-
-    listardatatable(tick_titulo,cat_id,prio_id);
-
-});
-
-/* TODO: Restaurar Datatable js y limpiar */
-$(document).on("click","#btntodo", function(){
-    limpiar();
-
-    $('#tick_titulo').val('');
-    $('#cat_id').val('').trigger('change');
-    $('#prio_id').val('').trigger('change');
-
-    listardatatable('','','');
-});
-
-/* TODO: Listar datatable con filtro avanzado */
-function listardatatable(tick_titulo,cat_id,prio_id){
-    tabla=$('#ticket_data').dataTable({
-        "aProcessing": true,
-        "aServerSide": true,
-        dom: 'Bfrtip',
-        "searching": true,
-        lengthChange: false,
-        colReorder: true,
-        buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-                ],
-        "ajax":{
-            url: '../../controller/ticket.php?op=listar_filtro',
-            type : "post",
-            dataType : "json",
-            data:{ tick_titulo:tick_titulo,cat_id:cat_id,prio_id:prio_id},
-            error: function(e){
-                console.log(e.responseText);
-            }
-        },
-        "ordering": false,
-        "bDestroy": true,
-        "responsive": true,
-        "bInfo":true,
-        "iDisplayLength": 10,
-        "autoWidth": false,
-        "language": {
-            "sProcessing":     "Procesando...",
-            "sLengthMenu":     "Mostrar _MENU_ registros",
-            "sZeroRecords":    "No se encontraron resultados",
-            "sEmptyTable":     "Ningún dato disponible en esta tabla",
-            "sInfo":           "Mostrando un total de _TOTAL_ registros",
-            "sInfoEmpty":      "Mostrando un total de 0 registros",
-            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-            "sInfoPostFix":    "",
-            "sSearch":         "Buscar:",
-            "sUrl":            "",
-            "sInfoThousands":  ",",
-            "sLoadingRecords": "Cargando...",
-            "oPaginate": {
-                "sFirst":    "Primero",
-                "sLast":     "Último",
-                "sNext":     "Siguiente",
-                "sPrevious": "Anterior"
-            },
-            "oAria": {
-                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-            }
-        }     
-    }).DataTable().ajax.reload();
-}
-
-/* TODO: Limpiamos restructurando el html del datatable js */
-function limpiar(){
-    $('#table').html(
-        "<table id='ticket_data' class='table table-bordered table-striped table-vcenter js-dataTable-full'>"+
-            "<thead>"+
-                "<tr>"+
-                    "<th style='width: 5%;'>Nro.Ticket</th>"+
-                    "<th style='width: 15%;'>Categoria</th>"+
-                    "<th class='d-none d-sm-table-cell' style='width: 30%;'>Titulo</th>"+
-                    "<th class='d-none d-sm-table-cell' style='width: 5%;'>Prioridad</th>"+
-                    "<th class='d-none d-sm-table-cell' style='width: 5%;'>Estado</th>"+
-                    "<th class='d-none d-sm-table-cell' style='width: 10%;'>Fecha Creación</th>"+
-                    "<th class='d-none d-sm-table-cell' style='width: 10%;'>Fecha Asignación</th>"+
-                    "<th class='d-none d-sm-table-cell' style='width: 10%;'>Fecha Cierre</th>"+
-                    "<th class='d-none d-sm-table-cell' style='width: 10%;'>Soporte</th>"+
-                    "<th class='text-center' style='width: 5%;'></th>"+
-                "</tr>"+
-            "</thead>"+
-            "<tbody>"+
-
-            "</tbody>"+
-        "</table>"
+function limpiarVisor(){
+    $('#pdf-iframe').attr('src', '').hide();
+    $('#placeholder-visor').show();
+    $('#titulo-pdf-activo').text('Ningún documento seleccionado');
+    $('#acciones-pdf').hide();
+    $('#contador-pdf').text('0');
+    $('#lista-pdfs').html(
+        '<div id="mensaje-inicial" class="text-center text-muted" style="margin-top:40px;">'+
+        '<i class="fa fa-search fa-3x" style="opacity:0.3;"></i>'+
+        '<p style="margin-top:10px;">Utilice los filtros para buscar documentos.</p>'+
+        '</div>'
     );
 }
-
-init();
