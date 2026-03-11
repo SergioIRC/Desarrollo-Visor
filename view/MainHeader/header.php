@@ -2,25 +2,20 @@
     <div class="container-fluid">
 
         <a href="#" class="site-logo">
-           <h2>HelpDesk</h2>
+           <h2>Visor-PDF</h2>
         </a>
 
-        <button id="show-hide-sidebar-toggle" class="show-hide-sidebar">
+       <!--  <button id="show-hide-sidebar-toggle" class="show-hide-sidebar">
             <span>toggle menu</span>
-        </button>
+        </button> -->
 
-        <button class="hamburger hamburger--htla">
+        <!-- <button class="hamburger hamburger--htla">
             <span>toggle menu</span>
-        </button>
+        </button> -->
 
         <div class="site-header-content">
             <div class="site-header-content-in">
                 <div class="site-header-shown">
-                    <div class="dropdown dropdown-notification notif">
-                        <a href="../MntNotificacion/" class="header-alarm">
-                            <i class="font-icon-alarm"></i>
-                        </a>
-                    </div>
                     <div class="dropdown user-menu">
                         <button class="dropdown-toggle" id="dd-user-menu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="../../public/<?php echo $_SESSION["rol_id"] ?>.jpg" alt="">

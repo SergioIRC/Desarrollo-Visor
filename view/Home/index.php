@@ -16,14 +16,12 @@
 
     <div class="mobile-menu-left-overlay"></div>
 
-    <?php require_once("../MainNav/nav.php");?>
-
 	<!-- Contenido -->
 	<div class="page-content">
 		<div class="container-fluid">
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-xl-12">
-					<!-- <div class="row">
+					<div class="row">
 						<div class="col-sm-4">
 	                        <article class="statistic-box green">
 	                            <div>
@@ -48,9 +46,10 @@
 	                            </div>
 	                        </article>
 	                    </div>
-					</div> -->
+					</div>
 				</div>
-			</div>
+	
+			</div> -->
 
 			<!-- <section class="card">
 				<header class="card-header">
@@ -69,7 +68,6 @@
 					<div id="idcalendar"></div>
 				</div>
 			</section> -->
-
 		</div>
 	</div>
 	<!-- Contenido -->

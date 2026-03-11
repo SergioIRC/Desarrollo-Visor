@@ -29,9 +29,9 @@
         <?php
     }else{
         ?>
-            <nav class="side-menu">
+           <!--  <nav class="side-menu">
                 <ul class="side-menu-list">
-                    <!-- <li class="blue-dirty">
+                    <li class="blue-dirty">
                         <a href="..\Home\">
                             <span class="glyphicon glyphicon-th"></span>
                             <span class="lbl">Inicio</span>
@@ -71,7 +71,7 @@
                             <span class="glyphicon glyphicon-th"></span>
                             <span class="lbl">Mant. Sub Categoria</span>
                         </a>
-                    </li> -->
+                    </li>
 
                     <li class="blue-dirty">
                         <a href="..\ConsultarTicket\">
@@ -80,7 +80,7 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav> -->
         <?php
     }
 ?>

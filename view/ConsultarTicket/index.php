@@ -5,15 +5,13 @@
 <!DOCTYPE html>
 <html>
     <?php require_once("../MainHead/head.php");?>
-	<title>AnderCode</>::Consultar Ticket</title>
+	<title>Visor - Consultar PDF</title>
 </head>
 <body class="with-side-menu">
 
     <?php require_once("../MainHeader/header.php");?>
 
     <div class="mobile-menu-left-overlay"></div>
-    
-    <?php require_once("../MainNav/nav.php");?>
 
 	<!-- Contenido -->
 	<div class="page-content">
@@ -23,11 +21,7 @@
 				<div class="tbl">
 					<div class="tbl-row">
 						<div class="tbl-cell">
-							<h3>Consultar Ticket</h3>
-							<ol class="breadcrumb breadcrumb-simple">
-								<li><a href="#">Home</a></li>
-								<li class="active">Consultar Ticket</li>
-							</ol>
+							<h3>Consultar PDF</h3>
 						</div>
 					</div>
 				</div>

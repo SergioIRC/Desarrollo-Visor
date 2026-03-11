@@ -13,8 +13,6 @@
 
     <div class="mobile-menu-left-overlay"></div>
     
-    <?php require_once("../MainNav/nav.php");?>
-
 	<!-- Contenido -->
 	<div class="page-content">
 		<div class="container-fluid">

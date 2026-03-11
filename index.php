@@ -76,14 +76,14 @@
                     <div class="form-group">
                         <input type="password" id="usu_pass" name="usu_pass" class="form-control" placeholder="Contraseña"/>
                     </div>
-                    <div class="form-group">
-                        <!-- <div class="float-right reset">
+                   <!--  <div class="form-group">
+                        <div class="float-right reset">
                             <a href="view/ResetPassword/">Recuperar Contraseña</a>
-                        </div> -->
+                        </div> 
                         <div class="float-left reset">
                             <a href="view/accesosoporte/">Acceso Soporte</a>
-                        </div>
-                    </div>
+                        </div> 
+                    </div> -->
                     <!-- <div class="form-group" style="display: flex; justify-content: center; align-items: center;"> -->
                         <!--TODO: Botón "Iniciar sesión con Google" con atributos de datos HTML para la API -->
                        <!--  <div id="g_id_onload"
