@@ -3,67 +3,13 @@
 
         private $ruta_base = "C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07";
 
-        public function combo_categorias(){
-            $conectar = parent::Conexion();
-            parent::set_names();
-            $sql = "SELECT cat_id, cat_nom FROM tm_categoria WHERE est = 1 ORDER BY cat_nom";
-            $stmt = $conectar->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-
-        public function combo_prioridades(){
-            $conectar = parent::Conexion();
-            parent::set_names();
-            $sql = "SELECT prio_id, prio_nom FROM tm_prioridad WHERE est = 1 ORDER BY prio_id";
-            $stmt = $conectar->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-
-        public function buscar_pdfs($titulo, $cat_id, $prio_id){
-            $conectar = parent::Conexion();
-            parent::set_names();
-
-            $cat_nom  = "";
-            $prio_nom = "";
-
-            if(!empty($cat_id)){
-                $sql = "SELECT cat_nom FROM tm_categoria WHERE cat_id = ? AND est = 1";
-                $stmt = $conectar->prepare($sql);
-                $stmt->bindValue(1, $cat_id);
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                if($row) $cat_nom = $row["cat_nom"];
-            }
-
-            if(!empty($prio_id)){
-                $sql = "SELECT prio_nom FROM tm_prioridad WHERE prio_id = ? AND est = 1";
-                $stmt = $conectar->prepare($sql);
-                $stmt->bindValue(1, $prio_id);
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                if($row) $prio_nom = $row["prio_nom"];
-            }
-
+        public function buscar_pdfs($municipio, $seccion, $volumen, $libro, $anio){
             $archivos = [];
-            $this->escanear_carpeta($this->ruta_base, $titulo, $archivos);
-
-            $resultado = [];
-            foreach($archivos as $ruta_completa){
-                $nombre = basename($ruta_completa);
-                $resultado[] = [
-                    "nombre"    => $nombre,
-                    "ruta"      => $ruta_completa,
-                    "categoria" => !empty($cat_nom)  ? $cat_nom  : "General",
-                    "prioridad" => !empty($prio_nom) ? $prio_nom : "Normal"
-                ];
-            }
-
-            return $resultado;
+            $this->escanear_carpeta($this->ruta_base, $municipio, $seccion, $volumen, $libro, $anio, $archivos);
+            return $archivos;
         }
 
-        private function escanear_carpeta($carpeta, $titulo, &$archivos){
+        private function escanear_carpeta($carpeta, $municipio, $seccion, $volumen, $libro, $anio, &$archivos){
             if(!is_dir($carpeta)) return;
 
             $items = scandir($carpeta);
@@ -73,11 +19,48 @@
                 $ruta = $carpeta . DIRECTORY_SEPARATOR . $item;
 
                 if(is_dir($ruta)){
-                    $this->escanear_carpeta($ruta, $titulo, $archivos);
-                } elseif(strtolower(pathinfo($item, PATHINFO_EXTENSION)) === 'pdf'){
-                    if(empty($titulo) || stripos($item, $titulo) !== false){
-                        $archivos[] = $ruta;
+                    $partes = explode('_', $item);
+                    if(count($partes) >= 7){
+                        $dir_municipio = intval($partes[1]);
+                        $dir_seccion   = intval($partes[2]);
+                        $dir_libro     = intval($partes[3]);
+                        $dir_volumen   = intval($partes[5]);
+                        $dir_anio      = intval($partes[6]);
+
+                        $coincide = true;
+                        if($municipio !== '' && $dir_municipio !== intval($municipio)) $coincide = false;
+                        if($seccion   !== '' && $dir_seccion   !== intval($seccion))   $coincide = false;
+                        if($volumen   !== '' && $dir_volumen   !== intval($volumen))   $coincide = false;
+                        if($libro     !== '' && $dir_libro     !== intval($libro))     $coincide = false;
+                        if($anio      !== '' && $dir_anio      !== intval($anio))      $coincide = false;
+
+                        if($coincide){
+                            $this->recopilar_pdfs($ruta, $item, $archivos);
+                        }
+                    } else {
+                        $this->escanear_carpeta($ruta, $municipio, $seccion, $volumen, $libro, $anio, $archivos);
                     }
+                }
+            }
+        }
+
+        private function recopilar_pdfs($carpeta, $nombre_carpeta, &$archivos){
+            if(!is_dir($carpeta)) return;
+
+            $items = scandir($carpeta);
+            foreach($items as $item){
+                if($item === '.' || $item === '..') continue;
+
+                $ruta = $carpeta . DIRECTORY_SEPARATOR . $item;
+
+                if(is_dir($ruta)){
+                    $this->recopilar_pdfs($ruta, $nombre_carpeta, $archivos);
+                } elseif(strtolower(pathinfo($item, PATHINFO_EXTENSION)) === 'pdf'){
+                    $archivos[] = [
+                        "nombre"  => $item,
+                        "ruta"    => $ruta,
+                        "carpeta" => $nombre_carpeta
+                    ];
                 }
             }
         }

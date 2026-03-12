@@ -31,45 +31,55 @@
 
 				<!-- Filtros de busqueda -->
 				<div class="row" id="viewfiltros">
-					<div class="col-lg-3">
+					<div class="col-lg-2">
 						<fieldset class="form-group">
-							<label class="form-label" for="tick_titulo">Titulo</label>
-							<input type="text" class="form-control" id="tick_titulo" name="tick_titulo" placeholder="Ingrese Titulo">
-						</fieldset>
-					</div>
-
-					<div class="col-lg-3">
-						<fieldset class="form-group">
-							<label class="form-label" for="cat_id">Categoria</label>
-							<select class="select2" id="cat_id" name="cat_id" data-placeholder="Seleccionar">
-								<option label="Seleccionar"></option>
-							</select>
+							<label class="form-label" for="municipio">Municipio</label>
+							<input type="text" class="form-control" id="municipio" name="municipio" placeholder="Ej. 13">
 						</fieldset>
 					</div>
 
 					<div class="col-lg-2">
 						<fieldset class="form-group">
-							<label class="form-label" for="prio_id">Prioridad</label>
-							<select class="select2" id="prio_id" name="prio_id" data-placeholder="Seleccionar">
-								<option label="Seleccionar"></option>
-							</select>
+							<label class="form-label" for="seccion">Sección</label>
+							<input type="text" class="form-control" id="seccion" name="seccion" placeholder="Ej. 1">
 						</fieldset>
 					</div>
 
 					<div class="col-lg-2">
+						<fieldset class="form-group">
+							<label class="form-label" for="volumen">Volumen</label>
+							<input type="text" class="form-control" id="volumen" name="volumen" placeholder="Ej. 2">
+						</fieldset>
+					</div>
+
+					<div class="col-lg-2">
+						<fieldset class="form-group">
+							<label class="form-label" for="libro">Libro</label>
+							<input type="text" class="form-control" id="libro" name="libro" placeholder="Ej. 20">
+						</fieldset>
+					</div>
+
+					<div class="col-lg-2">
+						<fieldset class="form-group">
+							<label class="form-label" for="anio">Año</label>
+							<input type="text" class="form-control" id="anio" name="anio" placeholder="Ej. 1989">
+						</fieldset>
+					</div>
+
+					<div class="col-lg-1">
 						<fieldset class="form-group">
 							<label class="form-label" for="btnfiltrar">&nbsp;</label>
 							<button type="button" class="btn btn-rounded btn-primary btn-block" id="btnfiltrar">
-								<i class="fa fa-search"></i> Filtrar
+								<i class="fa fa-search"></i>
 							</button>
 						</fieldset>
 					</div>
 
-					<div class="col-lg-2">
+					<div class="col-lg-1">
 						<fieldset class="form-group">
 							<label class="form-label" for="btntodo">&nbsp;</label>
 							<button type="button" class="btn btn-rounded btn-default btn-block" id="btntodo">
-								<i class="fa fa-refresh"></i> Limpiar
+								<i class="fa fa-refresh"></i>
 							</button>
 						</fieldset>
 					</div>
@@ -103,11 +113,11 @@
 									<span class="fa fa-file-pdf-o" style="color:#d9534f;"></span>
 									<strong id="titulo-pdf-activo" style="margin-left:5px;">Ningún documento seleccionado</strong>
 								</div>
-								<div id="acciones-pdf" style="display:none;">
+								<!-- <div id="acciones-pdf" style="display:none;">
 									<a id="btn-descargar-pdf" href="#" target="_blank" class="btn btn-sm btn-success">
 										<i class="fa fa-download"></i> Descargar
 									</a>
-								</div>
+								</div> -->
 							</div>
 							<div id="contenedor-iframe" style="flex:1; position:relative; overflow:hidden;">
 								<div id="placeholder-visor" class="text-center text-muted" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">

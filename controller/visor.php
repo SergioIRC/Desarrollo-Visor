@@ -24,21 +24,22 @@
         break;
 
         case "buscar_pdfs":
-            $titulo  = isset($_POST["titulo"])  ? trim($_POST["titulo"])  : "";
-            $cat_id  = isset($_POST["cat_id"])  ? trim($_POST["cat_id"])  : "";
-            $prio_id = isset($_POST["prio_id"]) ? trim($_POST["prio_id"]) : "";
+            $municipio = isset($_POST["municipio"]) ? trim($_POST["municipio"]) : "";
+            $seccion   = isset($_POST["seccion"])   ? trim($_POST["seccion"])   : "";
+            $volumen   = isset($_POST["volumen"])   ? trim($_POST["volumen"])   : "";
+            $libro     = isset($_POST["libro"])     ? trim($_POST["libro"])     : "";
+            $anio      = isset($_POST["anio"])      ? trim($_POST["anio"])      : "";
 
-            $datos = $visor->buscar_pdfs($titulo, $cat_id, $prio_id);
+            $datos = $visor->buscar_pdfs($municipio, $seccion, $volumen, $libro, $anio);
 
             $resultado = [];
             foreach($datos as $row){
                 $ruta_encoded = base64_encode($row["ruta"]);
                 $resultado[] = [
-                    "nombre"    => $row["nombre"],
-                    "ruta"      => $ruta_encoded,
-                    "url"       => "../../controller/servir_pdf.php?f=" . urlencode($ruta_encoded),
-                    "categoria" => $row["categoria"],
-                    "prioridad" => $row["prioridad"]
+                    "nombre"  => $row["nombre"],
+                    "ruta"    => $ruta_encoded,
+                    "url"     => "../../controller/servir_pdf.php?f=" . urlencode($ruta_encoded),
+                    "carpeta" => $row["carpeta"]
                 ];
             }
             echo json_encode($resultado);
@@ -52,6 +53,36 @@
                 $visor->registrar_log($usu_id, $pdf_nombre, $pdf_ruta);
             }
             echo json_encode(["status" => "ok"]);
+        break;
+
+    case "debug_scan":
+            $ruta_base = "C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07";
+            $info = [
+                "ruta_base"      => $ruta_base,
+                "is_dir"         => is_dir($ruta_base),
+                "is_readable"    => is_readable($ruta_base),
+                "contenido"      => [],
+            ];
+            if(is_dir($ruta_base)){
+                $items = scandir($ruta_base);
+                foreach($items as $item){
+                    if($item === '.' || $item === '..') continue;
+                    $ruta = $ruta_base . DIRECTORY_SEPARATOR . $item;
+                    $partes = explode('_', $item);
+                    $info["contenido"][] = [
+                        "nombre"        => $item,
+                        "es_dir"        => is_dir($ruta),
+                        "num_partes"    => count($partes),
+                        "partes"        => $partes,
+                        "municipio_pos1"=> isset($partes[1]) ? $partes[1] : null,
+                        "seccion_pos2"  => isset($partes[2]) ? $partes[2] : null,
+                        "libro_pos3"    => isset($partes[3]) ? $partes[3] : null,
+                        "volumen_pos5"  => isset($partes[5]) ? $partes[5] : null,
+                    ];
+                }
+            }
+            header('Content-Type: application/json');
+            echo json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         break;
 
     }
