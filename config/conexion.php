@@ -10,7 +10,7 @@
                 //TODO: Cadena de Conexion Local
 				$conectar = $this->dbh = new PDO("mysql:local=localhost;dbname=DemoVisor","root","");
                 //TODO: Cadena de Conexion Produccion
-                //$conectar = $this->dbh = new PDO("mysql:host=localhost;dbname=andercode_helpdesk1","andercode","contraseña");
+                //$conectar = $this->dbh = new PDO("mysql:host=localhost;dbname=Nombre_DB","Usuario","contraseña");
 				return $conectar;
 			} catch (Exception $e) {
 				print "¡Error BD!: " . $e->getMessage() . "<br/>";
@@ -28,7 +28,7 @@
             //TODO: Ruta Proyecto Local
 			return "http://localhost:9090/Desarrollo-Visor/";
             //TODO: Ruta Proyecto Produccion
-            //return "http://helpdesk.anderson-bastidas.com/";
+            //return "http://URL_PRODUCCION/";
 		}
 
     }

@@ -50,6 +50,7 @@
 
 						<div class="col-lg-12">
 							<button type="button" id="btnactualizar" class="btn btn-rounded btn-inline btn-primary">Actualizar</button>
+							<a href="../ConsultarPDF/" class="btn btn-rounded btn-inline btn-default">Regresar</a>
 						</div>
 				</div>
 
