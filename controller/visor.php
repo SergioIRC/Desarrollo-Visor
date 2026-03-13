@@ -40,8 +40,26 @@
             $usu_id      = isset($_POST["usu_id"])      ? intval($_POST["usu_id"])          : 0;
             $pdf_nombre  = isset($_POST["pdf_nombre"])  ? trim($_POST["pdf_nombre"])         : "";
             $pdf_ruta    = isset($_POST["pdf_ruta"])    ? base64_decode($_POST["pdf_ruta"])  : "";
-            if($usu_id > 0 && !empty($pdf_nombre)){
-                $visor->registrar_log($usu_id, $pdf_nombre, $pdf_ruta);
+            $detalle     = isset($_POST["detalle_busqueda"]) ? trim($_POST["detalle_busqueda"]) : "";
+            $accion      = isset($_POST["accion"])      ? trim($_POST["accion"])             : "consulta";
+            if($accion !== "impresion" && $accion !== "busqueda"){
+                $accion = "consulta";
+            }
+
+            if($pdf_nombre === ""){
+                $pdf_nombre = null;
+            }
+
+            if($pdf_ruta === ""){
+                $pdf_ruta = null;
+            }
+
+            if($detalle === ""){
+                $detalle = null;
+            }
+
+            if($usu_id > 0 && ($detalle !== null || $pdf_nombre !== null)){
+                $visor->registrar_log($usu_id, $accion, $detalle, $pdf_nombre, $pdf_ruta);
             }
             echo json_encode(["status" => "ok"]);
         break;

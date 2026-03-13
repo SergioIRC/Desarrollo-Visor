@@ -1,7 +1,7 @@
 <?php
     class Visor extends Conectar{
 
-        private $ruta_base = "C:RutasPDF/";
+        private $ruta_base = "C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07";
 
         public function combo_municipios(){
             $conectar = parent::Conexion();
@@ -74,14 +74,37 @@
             }
         }
 
-        public function registrar_log($usu_id, $pdf_nombre, $pdf_ruta){
+        public function registrar_log($usu_id, $accion = "consulta", $detalle_busqueda = null, $pdf_nombre = null, $pdf_ruta = null){
             $conectar = parent::Conexion();
             parent::set_names();
-            $sql = "INSERT INTO tm_log_visor (log_id, usu_id, pdf_nombre, pdf_ruta, fech_consulta) VALUES (NULL, ?, ?, ?, NOW())";
+            $sql = "INSERT INTO tm_log_visor (
+                        log_id,
+                        usu_id,
+                        usu_nombre,
+                        detalle_busqueda,
+                        pdf_nombre,
+                        pdf_ruta,
+                        accion,
+                        fech_evento
+                    )
+                    SELECT
+                        NULL,
+                        usu_id,
+                        CONCAT_WS(' ', usu_nom, usu_ape),
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        NOW()
+                    FROM tm_usuario
+                    WHERE usu_id = ?
+                    LIMIT 1";
             $stmt = $conectar->prepare($sql);
-            $stmt->bindValue(1, $usu_id);
+            $stmt->bindValue(1, $detalle_busqueda);
             $stmt->bindValue(2, $pdf_nombre);
             $stmt->bindValue(3, $pdf_ruta);
+            $stmt->bindValue(4, $accion);
+            $stmt->bindValue(5, $usu_id);
             $stmt->execute();
         }
     }

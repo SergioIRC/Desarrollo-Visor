@@ -9,7 +9,7 @@
     $ruta = base64_decode($_GET["f"]);
     $ruta = realpath($ruta);
 
-    $ruta_base = realpath("C:RutasPDF/");
+    $ruta_base = realpath("C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07");
 
     if($ruta === false || $ruta_base === false){
         http_response_code(404);
@@ -37,7 +37,10 @@
     header("Content-Type: application/pdf");
     header("Content-Disposition: inline; filename=\"" . $nombre . "\"");
     header("Content-Length: " . $tamano);
-    header("Cache-Control: private, max-age=3600");
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+    header("X-Content-Type-Options: nosniff");
     header("Accept-Ranges: bytes");
 
     readfile($ruta);
