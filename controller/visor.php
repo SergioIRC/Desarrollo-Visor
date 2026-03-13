@@ -5,20 +5,11 @@
 
     switch($_GET["op"]){
 
-        case "combo_categorias":
-            $datos = $visor->combo_categorias();
-            $html = "";
+        case "combo_municipios":
+            $datos = $visor->combo_municipios();
+            $html = "<option value=''>-- Seleccione --</option>";
             foreach($datos as $row){
-                $html .= "<option value='".$row["cat_id"]."'>".$row["cat_nom"]."</option>";
-            }
-            echo $html;
-        break;
-
-        case "combo_prioridades":
-            $datos = $visor->combo_prioridades();
-            $html = "";
-            foreach($datos as $row){
-                $html .= "<option value='".$row["prio_id"]."'>".$row["prio_nom"]."</option>";
+                $html .= "<option value='".$row["mun_codigo"]."'>".$row["mun_nombre"]."</option>";
             }
             echo $html;
         break;
@@ -55,35 +46,9 @@
             echo json_encode(["status" => "ok"]);
         break;
 
-    case "debug_scan":
-            $ruta_base = "C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07";
-            $info = [
-                "ruta_base"      => $ruta_base,
-                "is_dir"         => is_dir($ruta_base),
-                "is_readable"    => is_readable($ruta_base),
-                "contenido"      => [],
-            ];
-            if(is_dir($ruta_base)){
-                $items = scandir($ruta_base);
-                foreach($items as $item){
-                    if($item === '.' || $item === '..') continue;
-                    $ruta = $ruta_base . DIRECTORY_SEPARATOR . $item;
-                    $partes = explode('_', $item);
-                    $info["contenido"][] = [
-                        "nombre"        => $item,
-                        "es_dir"        => is_dir($ruta),
-                        "num_partes"    => count($partes),
-                        "partes"        => $partes,
-                        "municipio_pos1"=> isset($partes[1]) ? $partes[1] : null,
-                        "seccion_pos2"  => isset($partes[2]) ? $partes[2] : null,
-                        "libro_pos3"    => isset($partes[3]) ? $partes[3] : null,
-                        "volumen_pos5"  => isset($partes[5]) ? $partes[5] : null,
-                    ];
-                }
-            }
-            header('Content-Type: application/json');
-            echo json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        default:
+            http_response_code(400);
+            echo json_encode(["error" => "Operacion no valida"]);
         break;
-
     }
 ?>

@@ -3,6 +3,15 @@
 
         private $ruta_base = "C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07";
 
+        public function combo_municipios(){
+            $conectar = parent::Conexion();
+            parent::set_names();
+            $sql = "SELECT mun_nombre, mun_codigo FROM tm_municipios_visor WHERE activo = 1 ORDER BY mun_nombre ASC";
+            $stmt = $conectar->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function buscar_pdfs($municipio, $seccion, $volumen, $libro, $anio){
             $archivos = [];
             $this->escanear_carpeta($this->ruta_base, $municipio, $seccion, $volumen, $libro, $anio, $archivos);

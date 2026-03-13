@@ -1,4 +1,4 @@
-<?php
+﻿<?php
     require_once("config/conexion.php");
     if(isset($_POST["enviar"]) and $_POST["enviar"]=="si"){
         require_once("models/Usuario.php");
@@ -31,15 +31,11 @@
             <div class="container-fluid">
 
                 <form class="sign-box" action="" method="post" id="login_form">
-
-                    <input type="hidden" id="rol_id" name="rol_id" value="2">
-                    <!-- <input type="hidden" id="rol_id" name="rol_id" value="2"> -->
                     <div class="sign-avatar">
                         <img src="public/1.jpg" alt="" id="imgtipo">
                     </div>
-                    <header class="sign-title" id="lbltitulo">Acceso Usuario</header>
+                    <header class="sign-title" id="lbltitulo">Acceso al sistema</header>
 
-                    <!-- TODO: validar segun valor al iniciar session -->
                     <?php
                         if (isset($_GET["m"])){
                             switch($_GET["m"]){
@@ -47,7 +43,7 @@
                                     ?>
                                         <div class="alert alert-warning alert-icon alert-close alert-dismissible fade in" role="alert">
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
+                                                <span aria-hidden="true">x</span>
                                             </button>
                                             <i class="font-icon font-icon-warning"></i>
                                             El Usuario y/o Contraseña son incorrectos.
@@ -59,7 +55,7 @@
                                     ?>
                                         <div class="alert alert-warning alert-icon alert-close alert-dismissible fade in" role="alert">
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
+                                                <span aria-hidden="true">x</span>
                                             </button>
                                             <i class="font-icon font-icon-warning"></i>
                                             Los campos estan vacios.
@@ -76,35 +72,6 @@
                     <div class="form-group">
                         <input type="password" id="usu_pass" name="usu_pass" class="form-control" placeholder="Contraseña"/>
                     </div>
-                   <!--  <div class="form-group">
-                        <div class="float-right reset">
-                            <a href="view/ResetPassword/">Recuperar Contraseña</a>
-                        </div> 
-                        <div class="float-left reset">
-                            <a href="view/accesosoporte/">Acceso Soporte</a>
-                        </div> 
-                    </div> -->
-                    <!-- <div class="form-group" style="display: flex; justify-content: center; align-items: center;"> -->
-                        <!--TODO: Botón "Iniciar sesión con Google" con atributos de datos HTML para la API -->
-                       <!--  <div id="g_id_onload"
-                            data-client_id="592225408682-0k7df94bqpucikiovudb27idooij9slm.apps.googleusercontent.com"
-                            data-context="signin"
-                            data-ux_mode="popup"
-                            data-callback="handleCredentialResponse"
-                            data-auto_prompt="false"
-                        >
-                        </div> -->
-
-                        <!--TODO: Configuración del botón de inicio de sesión con Google -->
-                       <!--  <div class="g_id_signin"
-                            data-type="standard"
-                            data-shape="rectangular"
-                            data-theme="outline"
-                            data-text="signin_with"
-                            data-size="large"
-                            data-logo_alignment="left"
-                        ></div> -->
-                    <!-- </div> -->
                     <input type="hidden" name="enviar" class="form-control" value="si">
                     <button type="submit" class="btn btn-rounded">Acceder</button>
                 </form>

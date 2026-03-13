@@ -2,6 +2,10 @@ var usu_id = $('#user_idx').val();
 
 $(document).ready(function(){
 
+    $.get('../../controller/visor.php?op=combo_municipios', function(data){
+        $('#municipio').html(data);
+    });
+
     $(document).on('click', '#btnfiltrar', function(){
         var municipio = $('#municipio').val().trim();
         var seccion   = $('#seccion').val().trim();
@@ -10,7 +14,13 @@ $(document).ready(function(){
         var anio      = $('#anio').val().trim();
 
         if(municipio === '' || seccion === '' || volumen === '' || libro === '' || anio === ''){
-            alert('Debe ingresar todos los parámetros de búsqueda: Municipio, Sección, Volumen, Libro y Año.');
+            swal({
+                title: 'Campos requeridos',
+                text: 'Debe llenar todos los filtros de búsqueda: Municipio, Sección, Volumen, Libro y Año.',
+                type: 'warning',
+                confirmButtonText: 'Entendido',
+                confirmButtonClass: 'btn-warning'
+            });
             return;
         }
 
@@ -26,7 +36,7 @@ $(document).ready(function(){
         limpiarVisor();
     });
 
-    $(document).on('keypress', '#municipio, #seccion, #volumen, #libro, #anio', function(e){
+    $(document).on('keypress', '#seccion, #volumen, #libro, #anio', function(e){
         if(e.which === 13){
             $('#btnfiltrar').trigger('click');
         }
@@ -94,14 +104,28 @@ function renderizarLista(documentos){
     $('#lista-pdfs').html(html);
 
     $(document).off('click', '.pdf-item').on('click', '.pdf-item', function(){
-        $('.pdf-item').css({'background':'', 'border-left':''});
-        $(this).css({'background':'#e8f0fe', 'border-left':'3px solid #337ab7'});
+        var $item  = $(this);
+        var url    = $item.data('pdf-url');
+        var ruta   = $item.data('pdf-ruta');
+        var nombre = $item.data('pdf-nombre');
 
-        var url    = $(this).data('pdf-url');
-        var ruta   = $(this).data('pdf-ruta');
-        var nombre = $(this).data('pdf-nombre');
-
-        abrirPDF(url, ruta, nombre);
+        swal({
+            title: '¿Visualizar documento?',
+            text: nombre,
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, abrir',
+            confirmButtonClass: 'btn-primary',
+            cancelButtonText: 'Cancelar',
+            closeOnConfirm: true
+        },
+        function(isConfirm){
+            if(isConfirm){
+                $('.pdf-item').css({'background':'', 'border-left':''});
+                $item.css({'background':'#e8f0fe', 'border-left':'3px solid #337ab7'});
+                abrirPDF(url, ruta, nombre);
+            }
+        });
     });
 }
 
@@ -109,8 +133,6 @@ function abrirPDF(url, ruta, nombre){
     $('#placeholder-visor').hide();
     $('#pdf-iframe').attr('src', url).show();
     $('#titulo-pdf-activo').text(nombre);
-    $('#btn-descargar-pdf').attr('href', url);
-    $('#acciones-pdf').show();
 
     $.post('../../controller/visor.php?op=registrar_log', {
         usu_id:      usu_id,
@@ -123,7 +145,6 @@ function limpiarVisor(){
     $('#pdf-iframe').attr('src', '').hide();
     $('#placeholder-visor').show();
     $('#titulo-pdf-activo').text('Ningún documento seleccionado');
-    $('#acciones-pdf').hide();
     $('#lista-pdfs').html(
         '<div id="mensaje-inicial" class="text-center text-muted" style="margin-top:40px;">'+
         '<i class="fa fa-search fa-3x" style="opacity:0.3;"></i>'+

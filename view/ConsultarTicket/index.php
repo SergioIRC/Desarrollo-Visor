@@ -34,7 +34,9 @@
 					<div class="col-lg-2">
 						<fieldset class="form-group">
 							<label class="form-label" for="municipio">Municipio</label>
-							<input type="text" class="form-control" id="municipio" name="municipio" placeholder="Ej. 13">
+							<select class="form-control" id="municipio" name="municipio">
+								<option value="">-- Seleccione --</option>
+							</select>
 						</fieldset>
 					</div>
 
@@ -108,16 +110,11 @@
 					<!-- Visor PDF iframe -->
 					<div class="col-lg-8 col-md-7" id="panel-visor">
 						<div style="height:75vh; border:1px solid #e0e0e0; border-radius:4px; display:flex; flex-direction:column;">
-							<div style="padding:10px 15px; background:#f5f5f5; border-bottom:1px solid #e0e0e0; display:flex; align-items:center; justify-content:space-between;">
+							<div style="padding:10px 15px; background:#f5f5f5; border-bottom:1px solid #e0e0e0; display:flex; align-items:center;">
 								<div>
 									<span class="fa fa-file-pdf-o" style="color:#d9534f;"></span>
 									<strong id="titulo-pdf-activo" style="margin-left:5px;">Ningún documento seleccionado</strong>
 								</div>
-								<!-- <div id="acciones-pdf" style="display:none;">
-									<a id="btn-descargar-pdf" href="#" target="_blank" class="btn btn-sm btn-success">
-										<i class="fa fa-download"></i> Descargar
-									</a>
-								</div> -->
 							</div>
 							<div id="contenedor-iframe" style="flex:1; position:relative; overflow:hidden;">
 								<div id="placeholder-visor" class="text-center text-muted" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
