@@ -93,6 +93,48 @@ INSERT INTO `tm_municipios_visor` (`mun_id`, `mun_nombre`, `mun_codigo`, `activo
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tm_secciones_visor`
+--
+
+CREATE TABLE `tm_secciones_visor` (
+  `sec_id` int(11) NOT NULL,
+  `sec_codigo` varchar(2) NOT NULL,
+  `sec_nombre` varchar(150) NOT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `tm_secciones_visor`
+--
+
+INSERT INTO `tm_secciones_visor` (`sec_id`, `sec_codigo`, `sec_nombre`, `activo`) VALUES
+(1, '01', 'Propiedad', 1),
+(2, '02', 'Gravamenes y limitaciones', 1),
+(3, '03', 'Asociacion Civil', 1),
+(4, '04', 'Resoluciones, Contratos y Convenios', 1),
+(5, '05', 'Bienes muebles', 1),
+(6, '10', 'Gran Propiedad', 1),
+(7, '11', 'Peq. Propiedad', 1),
+(8, '15', 'Seccion Auxiliar', 1),
+(9, '26', 'Actos y Contratos', 1),
+(10, '29', 'Duplicado G.P.', 1),
+(11, '30', 'Duplicado P.P.', 1),
+(12, '38', 'Fraccionamientos', 1),
+(13, '40', 'Hipotecas', 1),
+(14, '42', 'RAN', 1),
+(15, '49', 'Planos', 1),
+(16, '51', 'Promesas de Ventas', 1),
+(17, '53', 'Rectificaciones', 1),
+(18, '58', 'Res. Jud y Adm.', 1),
+(19, '61', 'Sentencias', 1),
+(20, '62', 'Solares Urbanos', 1),
+(21, '63', 'Tercer Auxiliar', 1),
+(22, '68', 'Comercio', 1),
+(23, '81', 'Varios', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tm_usuario`
 --
 
@@ -139,6 +181,12 @@ ALTER TABLE `tm_municipios_visor`
   ADD PRIMARY KEY (`mun_id`);
 
 --
+-- Indices de la tabla `tm_secciones_visor`
+--
+ALTER TABLE `tm_secciones_visor`
+  ADD PRIMARY KEY (`sec_id`);
+
+--
 -- Indices de la tabla `tm_usuario`
 --
 ALTER TABLE `tm_usuario`
@@ -159,6 +207,12 @@ ALTER TABLE `tm_log_visor`
 --
 ALTER TABLE `tm_municipios_visor`
   MODIFY `mun_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `tm_secciones_visor`
+--
+ALTER TABLE `tm_secciones_visor`
+  MODIFY `sec_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `tm_usuario`

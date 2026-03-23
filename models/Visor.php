@@ -12,6 +12,15 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        public function combo_secciones(){
+            $conectar = parent::Conexion();
+            parent::set_names();
+            $sql = "SELECT sec_nombre, sec_codigo FROM tm_secciones_visor WHERE activo = 1 ORDER BY sec_codigo ASC";
+            $stmt = $conectar->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function buscar_pdfs($municipio, $seccion, $volumen, $libro, $anio){
             $archivos = [];
             $this->escanear_carpeta($this->ruta_base, $municipio, $seccion, $volumen, $libro, $anio, $archivos);

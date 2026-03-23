@@ -41,7 +41,9 @@
                     <div class="col-lg-2">
                         <fieldset class="form-group">
                             <label class="form-label" for="seccion">Seccion</label>
-                            <input type="text" class="form-control" id="seccion" name="seccion" placeholder="Ej. 1">
+                            <select class="form-control" id="seccion" name="seccion">
+                                <option value="">-- Seleccione --</option>
+                            </select>
                         </fieldset>
                     </div>
 

@@ -1,11 +1,16 @@
 var usu_id = $('#user_idx').val();
 var pdfActivo = null;
 var ultimoAvisoProteccion = 0;
+var detalleBusquedaActual = null;
 
 $(document).ready(function(){
 
     $.get('../../controller/visor.php?op=combo_municipios', function(data){
         $('#municipio').html(data);
+    });
+
+    $.get('../../controller/visor.php?op=combo_secciones', function(data){
+        $('#seccion').html(data);
     });
 
     $(document).on('click', '#btnfiltrar', function(){
@@ -38,7 +43,7 @@ $(document).ready(function(){
         limpiarVisor();
     });
 
-    $(document).on('keypress', '#seccion, #volumen, #libro, #anio', function(e){
+    $(document).on('keypress', '#volumen, #libro, #anio', function(e){
         if(e.which === 13){
             $('#btnfiltrar').trigger('click');
         }
@@ -243,6 +248,7 @@ function registrarEventoPDF(accion){
 
     $.post('../../controller/visor.php?op=registrar_log', {
         usu_id: usu_id,
+        detalle_busqueda: pdfActivo.detalleBusqueda,
         pdf_nombre: pdfActivo.nombre,
         pdf_ruta: pdfActivo.ruta,
         accion: accion
@@ -254,10 +260,12 @@ function registrarBusqueda(municipio, seccion, volumen, libro, anio, documentos)
         return;
     }
 
+    detalleBusquedaActual = construirDetalleBusqueda(municipio, seccion, volumen, libro, anio, documentos);
+
     $.post('../../controller/visor.php?op=registrar_log', {
         usu_id: usu_id,
         accion: 'busqueda',
-        detalle_busqueda: construirDetalleBusqueda(municipio, seccion, volumen, libro, anio, documentos)
+        detalle_busqueda: detalleBusquedaActual
     });
 }
 
@@ -265,7 +273,8 @@ function abrirPDF(url, ruta, nombre){
     pdfActivo = {
         nombre: nombre,
         ruta: ruta,
-        url: url
+        url: url,
+        detalleBusqueda: detalleBusquedaActual
     };
 
     $('#placeholder-visor').hide();
@@ -302,6 +311,7 @@ function imprimirPDF(){
 
 function limpiarVisor(){
     pdfActivo = null;
+    detalleBusquedaActual = null;
     $('#pdf-iframe').attr('src', '').hide();
     $('#pdf-protector').hide();
     $('#placeholder-visor').show();

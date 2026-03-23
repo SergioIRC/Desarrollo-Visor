@@ -14,6 +14,15 @@
             echo $html;
         break;
 
+        case "combo_secciones":
+            $datos = $visor->combo_secciones();
+            $html = "<option value=''>-- Seleccione --</option>";
+            foreach($datos as $row){
+                $html .= "<option value='".$row["sec_codigo"]."'>".$row["sec_codigo"]." - ".$row["sec_nombre"]."</option>";
+            }
+            echo $html;
+        break;
+
         case "buscar_pdfs":
             $municipio = isset($_POST["municipio"]) ? trim($_POST["municipio"]) : "";
             $seccion   = isset($_POST["seccion"])   ? trim($_POST["seccion"])   : "";
