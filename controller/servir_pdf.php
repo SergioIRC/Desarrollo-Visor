@@ -9,7 +9,7 @@
     $ruta = base64_decode($_GET["f"]);
     $ruta = realpath($ruta);
 
-    $ruta_base = realpath("C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07");
+    $ruta_base = realpath(Conectar::ruta_libros());
 
     if($ruta === false || $ruta_base === false){
         http_response_code(404);

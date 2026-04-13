@@ -31,5 +31,12 @@
             //return "http://URL_PRODUCCION/";
 		}
 
+        public static function ruta_libros(){
+            //TODO: Ruta local de libros
+            return "C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07";
+            //TODO: Ruta compartida para produccion
+            //return "\\\\GEMINIS00\\libros cade\\LIBROS\\07";
+        }
+
     }
 ?>

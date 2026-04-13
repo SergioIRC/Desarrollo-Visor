@@ -1,7 +1,11 @@
 <?php
     class Visor extends Conectar{
 
-        private $ruta_base = "C:\\Users\\sergio.asencio\\Desktop\\Sergio\\bk-visor\\LIBROS\\07";
+        private $ruta_base = "";
+
+        public function __construct(){
+            $this->ruta_base = Conectar::ruta_libros();
+        }
 
         public function combo_municipios(){
             $conectar = parent::Conexion();
